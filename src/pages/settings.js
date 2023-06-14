@@ -87,5 +87,5 @@ function Settings({ user, signOut }) {
 }
 
 export default withAuthenticator(Settings, {
-	signUpAttributes: ['email', 'given_name', 'family_name'],
+	signUpAttributes: ['email'],
 });

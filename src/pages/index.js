@@ -24,5 +24,5 @@ function Home({ signOut, user }) {
 }
 
 export default withAuthenticator(Home, {
-	signUpAttributes: ['email', 'given_name', 'family_name'],
+	signUpAttributes: ['email'],
 });

@@ -167,7 +167,7 @@ function Profile({ signOut, user, biography, city, country, createdAt, firstname
 }
 
 export default withAuthenticator(Profile, {
-	signUpAttributes: ['email', 'given_name', 'family_name'],
+	signUpAttributes: ['email'],
 });
 
 export async function getServerSideProps(context) {
