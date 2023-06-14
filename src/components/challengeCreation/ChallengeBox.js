@@ -1,11 +1,11 @@
-import CreateGameModal from '@/components/CreateGameModal';
 import { API } from 'aws-amplify';
 import { Button } from 'antd';
 import { useState, useEffect } from 'react';
 import { getChallenges } from '@/graphql/queries';
 import { onCreateChallenge, onDeleteChallenge } from '@/graphql/subscriptions';
 import { deleteChallenge, createChallenge } from '@/graphql/mutations';
-import Challenge from '@/components/Challenge';
+import Challenge from '@/components/challengeCreation/Challenge';
+import CreateGameModal from '@/components/challengeCreation/CreateGameModal';
 
 export default function ChallengeBox({ username }) {
 	const [modalVisible, setModalVisible] = useState(false); // Visibility of the modal to create a game

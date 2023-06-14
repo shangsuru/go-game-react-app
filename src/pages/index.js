@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import config from '@/aws-exports';
 import { Amplify } from 'aws-amplify';
-import ChallengeBox from '@/components/ChallengeBox';
+import ChallengeBox from '@/components/challengeCreation/ChallengeBox';
 import MenuBar from '@/components/MenuBar';
 
 Amplify.configure({ ...config, ssr: true });
