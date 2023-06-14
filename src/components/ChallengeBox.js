@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import { useState, useEffect } from 'react';
 import { getChallenges } from '@/graphql/queries';
 import { onCreateChallenge, onDeleteChallenge } from '@/graphql/subscriptions';
-import { deleteChallenge } from '@/graphql/mutations';
+import { deleteChallenge, createChallenge } from '@/graphql/mutations';
 import Challenge from '@/components/Challenge';
 
 export default function ChallengeBox({ username }) {
@@ -14,9 +14,13 @@ export default function ChallengeBox({ username }) {
 	useEffect(() => {
 		API.graphql({
 			query: getChallenges,
-		}).then(({ data }) => {
-			setChallenges(data.getChallenges.items);
-		});
+		})
+			.then(({ data }) => {
+				setChallenges(data.getChallenges.items);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	}, []);
 
 	useEffect(() => {
@@ -24,7 +28,10 @@ export default function ChallengeBox({ username }) {
 			query: onCreateChallenge,
 		}).subscribe({
 			next: ({ value }) => {
-				setChallenges(...challenges, value.data.onCreateChallenge);
+				let challenge = value.data.onCreateChallenge;
+				if (challenge.creator !== username) {
+					setChallenges([...challenges, challenge]);
+				}
 			},
 		});
 
@@ -36,7 +43,11 @@ export default function ChallengeBox({ username }) {
 			query: onDeleteChallenge,
 		}).subscribe({
 			next: ({ value }) => {
-				setChallenges(challenges.filter((challenge) => challenge.id !== value.data.onDeleteChallenge.id));
+				// TODO: sth wrong here? it deletes everything?
+				let deletedChallenge = value.data.onDeleteChallenge;
+				if (deletedChallenge.creator !== username) {
+					setChallenges(challenges.filter((challenge) => challenge.id !== deletedChallenge.id));
+				}
 			},
 		});
 
@@ -57,11 +68,34 @@ export default function ChallengeBox({ username }) {
 						id: challenge.id,
 					},
 				});
+				setChallenges(challenges.filter((c) => c.id !== challenge.id));
 			} catch (err) {
 				console.log(err);
 			}
 		} else {
 			// TODO: Join a challenge
+		}
+	}
+
+	async function handleModalOk(selectedBoardSize, selectedTime, selectedIncrement, selectedGameMode) {
+		toggleModal();
+		let challenge = {
+			rating: 0, // TODO: set actual rating
+			boardSize: selectedBoardSize,
+			duration: selectedTime,
+			timeIncrement: selectedIncrement,
+			isRated: selectedGameMode === 'rated',
+		};
+
+		try {
+			const { data } = await API.graphql({
+				query: createChallenge,
+				variables: { input: challenge },
+			});
+
+			setChallenges([...challenges, data.createChallenge]);
+		} catch (err) {
+			console.log(err);
 		}
 	}
 
@@ -79,10 +113,11 @@ export default function ChallengeBox({ username }) {
 						marginTop: '15px',
 					}}
 					onClick={toggleModal}
+					disabled={challenges.filter((c) => c.creator === username).length > 0}
 				>
 					Create a game
 				</Button>
-				<CreateGameModal visible={modalVisible} toggleModal={toggleModal} />
+				<CreateGameModal visible={modalVisible} toggleModal={toggleModal} handleModalOk={handleModalOk} />
 			</div>
 		</div>
 	);

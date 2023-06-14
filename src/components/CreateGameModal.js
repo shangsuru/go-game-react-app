@@ -1,36 +1,19 @@
 import { Col, InputNumber, Modal, Radio, Row, Slider } from 'antd';
 import { useState } from 'react';
-import { createChallenge } from '@/graphql/mutations';
-import { API } from 'aws-amplify';
 
-export default function CreateGameModal({ visible, toggleModal }) {
+export default function CreateGameModal({ visible, toggleModal, handleModalOk }) {
 	const [selectedBoardSize, setSelectedBoardSize] = useState(9); // 9x9, 13x13, 19x19
 	const [selectedTime, setSelectedTime] = useState(5); // Time limit for each player between 5 - 40 min
 	const [selectedIncrement, setSelectedIncrement] = useState(0); // Increment for each move between 0 - 40s
 	const [selectedGameMode, setSelectedGameMode] = useState('casual'); // rated or casual games
 
-	async function handleModalOk() {
-		toggleModal();
-		let challenge = {
-			rating: 0, // TODO: set actual rating
-			boardSize: selectedBoardSize,
-			duration: selectedTime,
-			timeIncrement: selectedIncrement,
-			isRated: selectedGameMode === 'rated',
-		};
-
-		try {
-			await API.graphql({
-				query: createChallenge,
-				variables: { input: challenge },
-			});
-		} catch (err) {
-			console.log(err);
-		}
-	}
-
 	return (
-		<Modal title='Create a game' open={visible} onOk={handleModalOk} onCancel={toggleModal}>
+		<Modal
+			title='Create a game'
+			open={visible}
+			onOk={() => handleModalOk(selectedBoardSize, selectedTime, selectedIncrement, selectedGameMode)}
+			onCancel={toggleModal}
+		>
 			<Row gutter={[0, 20]} justify='space-around'>
 				<Col span={4}>Time Limit</Col>
 				<Col span={8}>
