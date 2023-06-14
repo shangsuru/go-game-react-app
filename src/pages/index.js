@@ -18,7 +18,7 @@ function Home({ signOut, user }) {
 
 	return (
 		<MenuBar signOut={signOut} username={user.username}>
-			<ChallengeBox />
+			<ChallengeBox username={user.username} />
 		</MenuBar>
 	);
 }

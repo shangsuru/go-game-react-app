@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { Input } from 'antd';
 import { HomeOutlined, PoweroffOutlined, SearchOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { useState } from 'react';
-import { redirect } from 'next/dist/server/api-utils';
 import { useRouter } from 'next/navigation';
 
 export default function MenuBar({ signOut, username, children }) {

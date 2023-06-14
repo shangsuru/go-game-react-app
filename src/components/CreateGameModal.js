@@ -1,5 +1,7 @@
 import { Col, InputNumber, Modal, Radio, Row, Slider } from 'antd';
 import { useState } from 'react';
+import { createChallenge } from '@/graphql/mutations';
+import { API } from 'aws-amplify';
 
 export default function CreateGameModal({ visible, toggleModal }) {
 	const [selectedBoardSize, setSelectedBoardSize] = useState(9); // 9x9, 13x13, 19x19
@@ -9,7 +11,22 @@ export default function CreateGameModal({ visible, toggleModal }) {
 
 	async function handleModalOk() {
 		toggleModal();
-		// TODO: Create a challenge
+		let challenge = {
+			rating: 0, // TODO: set actual rating
+			boardSize: selectedBoardSize,
+			duration: selectedTime,
+			timeIncrement: selectedIncrement,
+			isRated: selectedGameMode === 'rated',
+		};
+
+		try {
+			await API.graphql({
+				query: createChallenge,
+				variables: { input: challenge },
+			});
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	return (
