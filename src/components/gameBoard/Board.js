@@ -1,21 +1,21 @@
 import Field from './Field';
 import { Stage, Layer, Rect } from 'react-konva';
 
-export default function Board({ boardHW, boardSize, onClick, boardState, currentPlayer }) {
+export default function Board({ canvasSize, boardSize, updateBoard, boardState, blacksTurn }) {
 	return (
-		<Stage width={boardHW} height={boardHW}>
+		<Stage width={canvasSize} height={canvasSize}>
 			<Layer>
-				<Rect width={boardHW} height={boardHW} fill='#ffc059' shadowBlur={10} />
+				<Rect width={canvasSize} height={canvasSize} fill='#ffc059' shadowBlur={10} />
 				{boardState.map((color, i) => {
 					return (
 						<Field
 							key={i}
 							x={Math.floor(i % boardSize)}
 							y={Math.floor(i / boardSize)}
-							fieldSize={boardHW / boardSize}
+							fieldSize={canvasSize / boardSize}
 							boardSize={boardSize}
 							color={color}
-							updateBoard={() => onClick(Math.floor(i % boardSize), Math.floor(i / boardSize, false), false, currentPlayer)}
+							updateBoard={() => updateBoard(Math.floor(i % boardSize), Math.floor(i / boardSize), blacksTurn)}
 						></Field>
 					);
 				})}

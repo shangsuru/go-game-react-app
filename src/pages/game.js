@@ -7,9 +7,9 @@ import { useState } from 'react';
 
 export default function GameWindow() {
 	const boardSize = 9; // TODO
-	const canvasSize = getCanvasSize(); // TODO
+	const canvasSize = getCanvasSize();
 	const username = 'myusername'; // TODO
-	const [currentPlayer, setCurrentPlayer] = useState('black');
+	const [blacksTurn, setBlacksTurn] = useState(true);
 	const [boardState, setBoardState] = useState(new Array(boardSize * boardSize).fill(null));
 
 	function getCanvasSize() {
@@ -20,6 +20,19 @@ export default function GameWindow() {
 
 	function onTimeout() {
 		console.log('timeout');
+	}
+
+	function updateBoard(x, y, blacksTurn) {
+		let i = y * boardSize + x;
+		if (boardState[i] !== null) {
+			return;
+		}
+		setBoardState((boardState) => {
+			let newBoardState = [...boardState];
+			newBoardState[i] = blacksTurn ? '#383b40' : '#f5f9ff';
+			return newBoardState;
+		});
+		setBlacksTurn(!blacksTurn);
 	}
 
 	return (
@@ -38,10 +51,10 @@ export default function GameWindow() {
 							<div className='boardview'>
 								<Board
 									boardSize={boardSize}
-									onClick={(x, y) => console.log(x, y)} // TODO
+									updateBoard={updateBoard} // TODO
 									boardState={boardState}
-									currentPlayer={currentPlayer}
-									boardHW={canvasSize} // TODO: make this dynamic
+									blacksTurn={blacksTurn}
+									canvasSize={canvasSize} // TODO: make this dynamic
 								/>
 							</div>
 						</Col>
