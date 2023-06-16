@@ -58,7 +58,14 @@ function Profile({ signOut, user, biography, city, country, createdAt, firstname
 							{firstname} {lastname}
 						</div>
 						<div>
-							<span>{renderFlag(country)}</span>
+							<span>
+								<img
+									width='5%'
+									alt={country}
+									src={renderFlag(country)}
+									style={{ marginRight: '7px', transform: 'translate(0, -0.2vw)' }}
+								/>
+							</span>
 							{city}
 							{city ? ', ' : null} {country}
 						</div>

@@ -19,6 +19,14 @@ h6 {
 	font-family: 'Roboto', sans-serif;
 }
 
+.clock {
+	padding: '0 15px';
+}
+
+.clock__active {
+	background-color: #629923;
+}
+
 .entry {
 	position: absolute;
 	top: 50%;
@@ -373,6 +381,21 @@ h6 {
 	width: 100%;
 	border-radius: 10px;
 	height: 100%;
+}
+
+.chatbox__outer {
+	display: 'flex';
+	flex-grow: 1;
+	flex-shrink: '1';
+	flex-direction: 'column';
+	align-items: 'center';
+	width: '100%';
+	margin: '20px';
+	min-height: '300px';
+	height: 'fit-content';
+	overflow: 'hidden';
+	scrollbar-width: 'none';
+	padding: '20px';
 }
 
 .chatbox__input {

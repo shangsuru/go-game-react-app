@@ -41,14 +41,7 @@ function renderFlag(country) {
 			break;
 	}
 
-	return (
-		<img
-			width='5%'
-			alt={altText}
-			src={`http://catamphetamine.gitlab.io/country-flag-icons/3x2/${countryID}.svg`}
-			style={{ marginRight: '7px', transform: 'translate(0, -0.2vw)' }}
-		/>
-	);
+	return `http://catamphetamine.gitlab.io/country-flag-icons/3x2/${countryID}.svg`;
 }
 
 export { countries, renderFlag };
